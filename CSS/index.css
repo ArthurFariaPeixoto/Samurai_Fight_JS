@@ -1,0 +1,70 @@
+*{
+    box-sizing: border-box;
+}
+
+.frame{
+    position: relative;
+    display: inline-block;
+}
+
+.head_frame{
+    position: absolute;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 20px;
+}
+
+.player1_life_box{
+    position: relative;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.player1_bottom_life{
+    background-color: darkgrey;
+    height: 50px;
+    width: 100%;
+}
+
+.player1_upper_life{
+    position: absolute;
+    background: lightgray;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+}
+
+.timer{
+    background-color: darkred;
+    height: 100px;
+    width: 100px;
+    flex-shrink: 0;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player2_life_box{
+    position: relative;
+    height: 50px;
+    width: 100%;
+}
+
+.player2_bottom_life{
+    background-color: darkgrey;
+    height: 50px;
+}
+
+.player2_upper_life{
+    position: absolute;
+    background: lightgray;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}

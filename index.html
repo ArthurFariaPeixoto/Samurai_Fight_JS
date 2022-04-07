@@ -3,11 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Samurai Fight</title>
+    <link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
-  <canvas>
+    <!-- All game screen-->
+    <div class="frame">
+        <!-- Head of the game-->
+        <div class= "head_frame">
 
-  </canvas>
+            <!-- Player 1 life-->
+            <div class="player1_life_box">
+                <div class="player1_bottom_life"></div>
+                <div id = "player_life" class="player1_upper_life"></div>
+            </div>
+
+            <!-- Timer-->
+            <div class = "timer">
+                10
+            </div>
+
+            <!-- Player 2 life-->
+            <div class="player2_life_box">
+                <div class="player2_bottom_life"></div>
+                <div id = "player2_life" class="player2_upper_life"></div>
+            </div>
+        </div>
+        <canvas></canvas>
+    </div>
+
+
   <script src="JS/game.js"></script>
 </body>
 </html>
