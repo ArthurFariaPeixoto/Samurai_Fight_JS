@@ -85,8 +85,8 @@ class Sprite{
 //All about Player 1
 const player = new Sprite({
     position:{
-        x: 0,
-        y:0
+        x: 100,
+        y:canvas.height-151
     },
     speed:{
       x: 0,
@@ -103,8 +103,8 @@ const player = new Sprite({
 //All about Player 2
 const player_2 = new Sprite({
     position:{
-        x: 400,
-        y:100
+        x: 850,
+        y:canvas.height-151
     },
     speed:{
         x: 0,
@@ -125,6 +125,41 @@ function Collision({rectangle1, regtangle2,}){
         rectangle1.attackBox.position.y <= regtangle2.position.y + regtangle2.height
     )
 }
+
+function winner({player, player_2, timerId}){
+    clearTimeout(timerId);
+    document.querySelector('#displayText').style.display = 'flex';
+
+    if (player.life === player_2.life) {
+        console.log('Tie');
+        document.querySelector('#displayText').innerHTML = 'Tie';
+    }
+    else if(player.life > player_2.life){
+        console.log('PLayer 1 wins');
+        document.querySelector('#displayText').innerHTML = 'Player 1 Wins';
+
+    }
+    else{
+        console.log('PLayer 2 wins');
+        document.querySelector('#displayText').innerHTML = 'Player 2 Wins';
+    }
+}
+
+let timer = 61;
+let timerId;
+function decreaseTimer(){
+
+    if(timer > 0){
+        timerId = setTimeout(decreaseTimer, 1000);
+        timer--;
+        document.querySelector('#timer').innerHTML = timer;
+    }
+
+    if(timer === 0) {
+        winner({player, player_2, timerId});
+    }
+}
+decreaseTimer();
 
 //All about loop animations
 function animate(){
@@ -158,16 +193,20 @@ function animate(){
     if(Collision({rectangle1: player, regtangle2: player_2}) && player.isAttacking){
         player.isAttacking = false;
         console.log("Player 1 hits player 2");
-        player_2.life-=7;
+        player_2.life-=5;
         document.querySelector('#player2_life').style.width = player_2.life + '%';
     }
     if(Collision({rectangle1: player_2, regtangle2: player}) && player_2.isAttacking){
         player_2.isAttacking = false;
         console.log("Player 2 hits player 1");
-        player.life-=7;
+        player.life-=5;
         document.querySelector('#player_life').style.width = player.life + '%';
     }
 
+    //End game based on their life
+    if(player_2.life <= 0 || player.life <= 0){
+        winner({player, player_2, timerId});
+    }
 }
 animate();
 
