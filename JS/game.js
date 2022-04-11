@@ -61,7 +61,7 @@ const player = new Players({
     frames: 9,
     scale:2.5,
     offset:{
-        x: 80,
+        x: 0,
         y: 3
     },
     sprites:{
@@ -72,6 +72,18 @@ const player = new Players({
         run:{
             imageSrc: './SRC/player/Run.png',
             frames:6
+        },
+        jump:{
+            imageSrc: './SRC/player/Jump.png',
+            frames:2
+        },
+        fall:{
+            imageSrc: './SRC/player/Fall.png',
+            frames:2
+        },
+        attack:{
+            imageSrc: './SRC/player/Attack.png',
+            frames:12
         }
     }
 
@@ -90,8 +102,33 @@ const player_2 = new Players({
     },
     color: 'green',
     offset:{
-        x: -50,
-        y:0
+        x: 0,
+        y: 3
+    },
+    imageSrc: './SRC/player/Idle.png',
+    frames: 9,
+    scale:2.5,
+    sprites:{
+        idle:{
+            imageSrc: './SRC/player/Idle.png',
+            frames:9
+        },
+        run:{
+            imageSrc: './SRC/player/Run.png',
+            frames:6
+        },
+        jump:{
+            imageSrc: './SRC/player/Jump.png',
+            frames:2
+        },
+        fall:{
+            imageSrc: './SRC/player/Fall.png',
+            frames:2
+        },
+        attack:{
+            imageSrc: './SRC/player/Attack.png',
+            frames:12
+        }
     }
 })
 
@@ -107,23 +144,30 @@ function animate(){
     background.update();
     shop.update();
     player.update();
-    //player_2.update();
+    player_2.update();
 
     player.speed.x=0;
     player_2.speed.x=0;
 
     //Player 1 movement
-    player.image = player.sprites.idle.image;
-    player.frames = player.sprites.idle.frames;
     if(keys.a.pressed && player.lastKey === 'a'){
         player.speed.x = -4.2;
-        player.image = player.sprites.run.image;
-        player.frames = player.sprites.run.frames;
+        player.changeSprite('run');
     }
     else if(keys.d.pressed && player.lastKey === 'd'){
         player.speed.x = 4.2;
-        player.image = player.sprites.run.image;
-        player.frames = player.sprites.run.frames;
+        player.changeSprite('run');
+    }
+    else{
+        player.changeSprite('idle');
+    }
+
+    //Player Jump
+    if(player.speed.y < 0){
+        player.changeSprite('jump');
+    }
+    else if(player.speed.y > 0){
+        player.changeSprite('fall');
     }
 
     //Player 2 movement

@@ -88,20 +88,67 @@ class Players extends Sprite{
         this.animateFrames();
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
         this.attackBox.position.y = this.position.y;
+
         this.position.x += this.speed.x;
         this.position.y += this.speed.y;
 
+        //Gravity
         if(this.position.y +this.height+this.speed.y >= canvas.height-96){
             this.speed.y = 0;
+            this.position.y = 330;
         } else{
             this.speed.y += gravity;
         }
 
     }
     attack(){
+        this.changeSprite('attack');
         this.isAttacking = true;
         setTimeout(() =>{
             this.isAttacking = false;
         }, 100)
+    }
+
+    changeSprite(sprite){
+        if(this.image === this.sprites.attack.image && this.frameActual < this.sprites.attack.frames-1){
+            return;
+        }
+        switch (sprite){
+            case 'idle':
+                if(this.image !== this.sprites.idle.image) {
+                    this.image = this.sprites.idle.image;
+                    this.frames = this.sprites.idle.frames;
+                    this.frameActual = 0;
+                }
+                break;
+            case 'run':
+                if(this.image !== this.sprites.run.image){
+                    this.image = this.sprites.run.image;
+                    this.frames = this.sprites.run.frames;
+                    this.frameActual = 0;
+                }
+                break;
+            case 'jump':
+                if(this.image !== this.sprites.jump.image) {
+                    this.image = this.sprites.jump.image;
+                    this.frames = this.sprites.jump.frames;
+                    this.frameActual = 0;
+                }
+                break;
+            case 'fall':
+                if(this.image !== this.sprites.fall.image) {
+                    this.image = this.sprites.fall.image;
+                    this.frames = this.sprites.fall.frames;
+                    this.frameActual = 0;
+                }
+                break;
+            case 'attack':
+                if(this.image !== this.sprites.attack.image) {
+                    this.image = this.sprites.attack.image;
+                    this.frames = this.sprites.attack.frames;
+                    this.frameActual = 0;
+                }
+                break;
+        }
     }
 }
