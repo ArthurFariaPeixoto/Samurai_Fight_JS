@@ -27,84 +27,62 @@ const keys = {
     }
 }
 
-//All about the sprites
-class Sprite{
-    constructor({position, speed, color, offset}) {
-        this.position = position;
-        this.speed = speed;
-        this.height = 150;
-        this.width = 50;
-        this.lastKey;
-        this.attackBox ={
-            position:{
-                x: this.position.x,
-                y:this.position.y
-            },
-            offset,
-            width: 100,
-            height: 50
-        }
-        this.color = color;
-        this.isAttacking
-        this.life = 100;
-    }
+//Background image
+const background = new Sprite({
+    position:{
+        x:0,
+        y:0
+    },
+    imageSrc: './SRC/background.png'
+})
 
-    putInScreen(){
-        graphics.fillStyle = this.color;
-        graphics.fillRect(this.position.x, this.position.y, this.width, this.height);
-
-        //Attack box
-        if(this.isAttacking) {
-            graphics.fillStyle = 'red';
-            graphics.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-        }
-    }
-
-    update(){
-        this.putInScreen();
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y;
-        this.position.x += this.speed.x;
-        this.position.y += this.speed.y;
-
-        if(this.position.y +this.height+this.speed.y >= canvas.height){
-            this.speed.y = 0;
-        } else{
-            this.speed.y += gravity;
-        }
-
-    }
-    attack(){
-        this.isAttacking = true;
-        setTimeout(() =>{
-            this.isAttacking = false;
-        }, 100)
-    }
-}
+//Shop
+const shop = new Sprite({
+    position:{
+        x:600,
+        y: 128
+    },
+    imageSrc: './SRC/shop_anim.png',
+    scale : 2.75,
+    frames:6
+})
 
 //All about Player 1
-const player = new Sprite({
+const player = new Players({
     position:{
         x: 100,
-        y:canvas.height-151
+        y:canvas.height-151 - 96
     },
     speed:{
       x: 0,
       y: 0
     },
-    color: 'blue',
+    imageSrc: './SRC/player/Idle.png',
+    frames: 9,
+    scale:2.5,
     offset:{
-        x: 0,
-        y: 0
+        x: 80,
+        y: 3
+    },
+    sprites:{
+        idle:{
+            imageSrc: './SRC/player/Idle.png',
+            frames:9
+        },
+        run:{
+            imageSrc: './SRC/player/Run.png',
+            frames:6
+        }
     }
+
 
 })
 
 //All about Player 2
-const player_2 = new Sprite({
+const player_2 = new Players({
     position:{
         x: 850,
-        y:canvas.height-151
+        y:canvas.height - 151 - 96
     },
     speed:{
         x: 0,
@@ -117,48 +95,7 @@ const player_2 = new Sprite({
     }
 })
 
-function Collision({rectangle1, regtangle2,}){
-    return(
-        rectangle1.attackBox.position.x + rectangle1.attackBox.width >= regtangle2.position.x &&
-        rectangle1.attackBox.position.x <= regtangle2.position.x + regtangle2.width &&
-        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= regtangle2.position.y &&
-        rectangle1.attackBox.position.y <= regtangle2.position.y + regtangle2.height
-    )
-}
-
-function winner({player, player_2, timerId}){
-    clearTimeout(timerId);
-    document.querySelector('#displayText').style.display = 'flex';
-
-    if (player.life === player_2.life) {
-        console.log('Tie');
-        document.querySelector('#displayText').innerHTML = 'Tie';
-    }
-    else if(player.life > player_2.life){
-        console.log('PLayer 1 wins');
-        document.querySelector('#displayText').innerHTML = 'Player 1 Wins';
-
-    }
-    else{
-        console.log('PLayer 2 wins');
-        document.querySelector('#displayText').innerHTML = 'Player 2 Wins';
-    }
-}
-
-let timer = 61;
-let timerId;
-function decreaseTimer(){
-
-    if(timer > 0){
-        timerId = setTimeout(decreaseTimer, 1000);
-        timer--;
-        document.querySelector('#timer').innerHTML = timer;
-    }
-
-    if(timer === 0) {
-        winner({player, player_2, timerId});
-    }
-}
+//Function that are inside utils.js
 decreaseTimer();
 
 //All about loop animations
@@ -167,18 +104,26 @@ function animate(){
     graphics.fillStyle ='black';
     graphics.fillRect(0,0, canvas.width, canvas.height);
 
+    background.update();
+    shop.update();
     player.update();
-    player_2.update();
+    //player_2.update();
 
     player.speed.x=0;
     player_2.speed.x=0;
 
     //Player 1 movement
+    player.image = player.sprites.idle.image;
+    player.frames = player.sprites.idle.frames;
     if(keys.a.pressed && player.lastKey === 'a'){
         player.speed.x = -4.2;
+        player.image = player.sprites.run.image;
+        player.frames = player.sprites.run.frames;
     }
     else if(keys.d.pressed && player.lastKey === 'd'){
         player.speed.x = 4.2;
+        player.image = player.sprites.run.image;
+        player.frames = player.sprites.run.frames;
     }
 
     //Player 2 movement
